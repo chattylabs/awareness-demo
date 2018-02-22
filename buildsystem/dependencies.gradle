@@ -1,0 +1,27 @@
+// Dependency versions
+
+ext {
+    //Android/Google
+    androidMinSdkVersion = 21 //18
+    androidTargetSdkVersion = 24
+    androidCompileSdkVersion = 27
+    supportVersion = '27.0.2'
+    playServiceVersion = '11.8.0'
+    firebaseVersion = playServiceVersion
+    constraintVersion = '1.0.2'
+    awarenessVersion = '9.4.0'
+
+    //Libraries
+    daggerVersion = '2.11'
+    rxJavaVersion = '2.1.1'
+    rxAndroidVersion = '2.0.1'
+    javaxInjectVersion = '1'
+    androidAnnotationsVersion = '21.0.3'
+
+    //Testing
+    espressoVersion = '3.0.1'
+    jUnitVersion = '4.12'
+    assertJVersion = '3.8.0'
+    mockitoVersion = '2.13.0'
+    robolectricVersion = '3.4.2'
+}

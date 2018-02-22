@@ -1,0 +1,13 @@
+apply plugin: 'com.android.feature'
+apply from: '../buildsystem/common.gradle'
+
+android {
+    baseFeature true
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api 'com.android.support:appcompat-v7:27.0.2'
+    application project(':app')
+    feature project(":awareness")
+}

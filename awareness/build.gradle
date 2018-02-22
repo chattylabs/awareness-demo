@@ -1,0 +1,8 @@
+apply plugin: 'com.android.feature'
+apply from: '../buildsystem/common.gradle'
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project(':base')
+    implementation "com.google.android.gms:play-services-contextmanager:$awarenessVersion"
+}
