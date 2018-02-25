@@ -1,11 +1,10 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.chattylabs.module.awareness">
-
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
     <application>
         <meta-data
             android:name="com.google.android.awareness.API_KEY"
             android:value="AIzaSyCqfpLmdNurYfgaJ5opgEVcWmSlNfP1QUQ"/>
     </application>
-
 </manifest>

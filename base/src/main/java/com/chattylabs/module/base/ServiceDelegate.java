@@ -20,6 +20,7 @@ public interface ServiceDelegate {
         String SERVICE_DESTROYED = "SERVICE_DESTROYED";
         String ON_LOW_MEMORY = "ON_LOW_MEMORY";
         String ON_TRIM_MEMORY = "ON_TRIM_MEMORY";
+        String ERROR = "ERROR";
     }
 
     class Utils {

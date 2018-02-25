@@ -1,18 +1,14 @@
 package com.chattylabs.demo;
 
 import android.app.IntentService;
-import android.app.Notification;
-import android.app.Service;
-import android.content.Context;
 import android.content.Intent;
-import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
 import com.chattylabs.module.base.ServiceDelegate;
 
 public class GeneralIntentService extends IntentService {
-    public static final String TAG = "GeneralIntentService".substring(0, 23);
+    public static final String TAG = "GeneralIntentService";
 
     private static boolean connected;
 
@@ -32,7 +28,7 @@ public class GeneralIntentService extends IntentService {
     public void onCreate() {
         super.onCreate();
         connected = true;
-        serviceDelegate.onCreate(getApplication(), this.getClass());
+        serviceDelegate.onCreate(getApplication(), getClass());
     }
 
     @Override

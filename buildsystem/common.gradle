@@ -9,9 +9,8 @@ android {
         targetSdkVersion androidTargetSdkVersion
         versionCode readVersionCode()
         versionName readVersionName()
-        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //vectorDrawables.useSupportLibrary = true
-        //multiDexEnabled true
+        multiDexEnabled true
     }
 
     compileOptions {
@@ -48,7 +47,7 @@ android {
             debuggable true
             minifyEnabled false
             shrinkResources false
-            //proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             testCoverageEnabled = false
         }
     }
@@ -70,4 +69,13 @@ android {
             }
         }
     }
+}
+
+/*
+Resolves dependency versions across test and production APKs, specifically, transitive
+dependencies. This is required since Espresso internally has a dependency on support-annotations.
+*/
+configurations.all {
+    resolutionStrategy.force "com.android.support:support-v4:${supportVersion}"
+    resolutionStrategy.force "com.android.support:support-annotations:${supportVersion}"
 }

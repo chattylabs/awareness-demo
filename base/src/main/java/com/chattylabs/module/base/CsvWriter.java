@@ -22,7 +22,6 @@ public class CsvWriter implements RequiredPermissions {
     public static final String TIMESTAMP = "TIMESTAMP";
     public static final String DATETIME = "DATETIME";
 
-    private Context context;
     private String filename;
     private String delimiter;
     private File directory;
@@ -30,10 +29,6 @@ public class CsvWriter implements RequiredPermissions {
     private String empty;
     private String[] headers;
     private ExecutorService executorService;
-
-    public CsvWriter(Context context) {
-        this.context = context;
-    }
 
     @Override
     public String[] requiredPermissions() {
@@ -48,16 +43,16 @@ public class CsvWriter implements RequiredPermissions {
         return new File(directory, name);
     }
 
-    public void init(String filename, String delimiter, String empty, String... headers) {
+    public void init(Context context, String filename, String delimiter, String empty, String... headers) {
         this.filename = filename;
         this.delimiter = delimiter;
         this.empty = empty;
         this.headers = headers;
         this.executorService = Executors.newSingleThreadExecutor();
-        executorService.submit(() -> init(headers));
+        executorService.submit(() -> init(context, headers));
     }
 
-    private void init(String... headers) {
+    private void init(Context context, String... headers) {
         File theFile = getLogFile();
         if (!theFile.exists()) {
             StringBuilder line = new StringBuilder();
@@ -74,7 +69,6 @@ public class CsvWriter implements RequiredPermissions {
                 file.write(line.toString());
                 file.newLine();
                 file.flush();
-                makeAvailable();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -85,26 +79,28 @@ public class CsvWriter implements RequiredPermissions {
                 e.printStackTrace();
             }
         }
+
+        if (context != null) refreshMediaScanner(context);
     }
 
     @SafeVarargs
-    public final void write(Pair<String, String>... keyValue) {
-        executorService.submit(() -> writeLocal(keyValue));
+    public final void write(Context context, Pair<String, String>... keyValues) {
+        executorService.submit(() -> writeLocal(context, keyValues));
     }
 
     @SafeVarargs
-    private final void writeLocal(Pair<String, String>... keyValue) {
+    private final void writeLocal(Context context, Pair<String, String>... keyValues) {
         if (file == null) {
             return;
         }
 
-        init(filename, delimiter, empty, headers);
+        init(context, filename, delimiter, empty, headers);
 
         StringBuilder line = new StringBuilder();
 
         head:
         for (String header : headers) {
-            for (Pair<String, String> aKeyValue : keyValue) {
+            for (Pair<String, String> aKeyValue : keyValues) {
                 if (header.equals(aKeyValue.first)) {
                     line.append(delimiter).append(aKeyValue.second);
                     continue head;
@@ -121,13 +117,14 @@ public class CsvWriter implements RequiredPermissions {
             file.write(line.toString());
             file.newLine();
             file.flush();
-            makeAvailable();
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        if (context != null) refreshMediaScanner(context);
     }
 
-    public void close() {
+    public void close(Context context) {
         if (file == null) {
             return;
         }
@@ -136,13 +133,14 @@ public class CsvWriter implements RequiredPermissions {
             file.close();
             executorService.shutdown();
             executorService.awaitTermination(3, TimeUnit.SECONDS);
-            makeAvailable();
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();
         }
+
+        if (context != null) refreshMediaScanner(context);
     }
 
-    private void makeAvailable() {
+    public void refreshMediaScanner(Context context) {
         // Tell the media scanner about the new file so that it is
         // immediately available to the user.
         MediaScannerConnection.scanFile(context, new String[] { file.toString() }, null, null);

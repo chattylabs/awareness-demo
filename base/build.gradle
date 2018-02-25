@@ -7,7 +7,8 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+    api "com.google.android.gms:play-services-contextmanager:$awarenessVersion"
     api 'com.android.support:appcompat-v7:27.0.2'
-    application project(':app')
     feature project(":awareness")
+    application project(':app')
 }

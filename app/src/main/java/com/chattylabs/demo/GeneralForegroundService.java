@@ -36,7 +36,7 @@ public class GeneralForegroundService extends Service {
     }
 
     public GeneralForegroundService() {
-        //this.serviceDelegate = new NotificationListenerDelegate();
+        //this.serviceDelegate = new ServiceDelegate();
     }
 
     @Override
@@ -49,7 +49,7 @@ public class GeneralForegroundService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         // If Android kills the service, after creating the new service instance;
-        // if there are not any pending start commands to be delivered to the service,
+        // if there are not any pending register commands to be delivered to the service,
         // it will be called with a null intent object (START_STICKY)
         if (intent != null) {
             Bundle extras = intent.getExtras();
