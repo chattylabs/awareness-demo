@@ -15,17 +15,6 @@ import java.lang.annotation.RetentionPolicy;
 public interface AwarenessComponent extends RequiredPermissions {
     String TAG = "AwarenessComponent";
 
-    /**
-     * Main intent filter action
-     */
-    String FENCE_ACTION = BuildConfig.APPLICATION_ID + ".FENCE_ACTION";
-
-    /**
-     * Custom actions
-     */
-    String START_IN_VEHICLE_FENCE = "startInVehicleFence";
-    String STOP_IN_VEHICLE_FENCE = "stopInVehicleFence";
-
     // Log constants
     String LOG_AWARENESS_FILENAME = "AWARENESS_COMPONENT";
     String LOG_STARTED_DRIVING = "LOG_STARTED_DRIVING";
@@ -65,11 +54,34 @@ public interface AwarenessComponent extends RequiredPermissions {
      * Fences types
      */
     interface Fences {
-        int STARTING_ON_FOOT = 0;
-        int STOPPING_ON_FOOT = 1;
+
+        /**
+         * Main intent filter action
+         */
+        String ACTION = BuildConfig.APPLICATION_ID + ".FENCE_ACTION";
+
+        /**
+         * Custom actions
+         */
+        int STARTING_ON_FOOT = 1;
+        int STOPPING_ON_FOOT = 2;
+        int STARTING_IN_VEHICLE = 3;
+        int STOPPING_IN_VEHICLE = 4;
+        int PLUGGING_HEADPHONE = 5;
+        int UNPLUGGING_HEADPHONE = 6;
+
+        /**
+         * Custom actions
+         */
+        String START_IN_VEHICLE_KEY = "startInVehicleFenceKey";
+        String STOP_IN_VEHICLE_KEY = "stopInVehicleFenceKey";
+        String START_ON_FOOT_KEY = "startOnFootFenceKey";
+        String STOP_ON_FOOT_KEY = "stopOnFootFenceKey";
+        String PLUG_HEADPHONE_KEY = "plugHeadphoneFenceKey";
+        String UNPLUG_HEADPHONE_KEY = "unplugHeadphoneFenceKey";
 
         @Retention(RetentionPolicy.SOURCE)
-        @IntDef({STARTING_ON_FOOT, STOPPING_ON_FOOT})
+        @IntDef({STARTING_ON_FOOT, STOPPING_ON_FOOT, STARTING_IN_VEHICLE, STOPPING_IN_VEHICLE, PLUGGING_HEADPHONE, UNPLUGGING_HEADPHONE})
         @interface Items {}
     }
 
@@ -80,15 +92,23 @@ public interface AwarenessComponent extends RequiredPermissions {
         private OnErrorListener errorListener;
         private OnConnectedListener connectedListener;
         private OnDisconnectedListener disconnectedListener;
-        private OnStartDrivingListener startDrivingListener;
-        private OnStopDrivingListener stopDrivingListener;
+        private OnStartInVehicleListener startInVehicleListener;
+        private OnStopInVehicleListener stopInVehicleListener;
+        private OnStartOnFootListener startOnFootListener;
+        private OnStopOnFootListener stopOnFootListener;
+        private OnPluggingHeadphoneListener pluggingHeadphoneListener;
+        private OnUnpluggingHeadphoneListener unpluggingHeadphoneListener;
 
         private Callbacks(Builder builder) {
             this.errorListener = builder.errorListener;
             this.connectedListener = builder.connectedListener;
             this.disconnectedListener = builder.disconnectedListener;
-            this.startDrivingListener = builder.startDrivingListener;
-            this.stopDrivingListener = builder.stopDrivingListener;
+            this.startInVehicleListener = builder.startInVehicleListener;
+            this.stopInVehicleListener = builder.stopInVehicleListener;
+            this.startOnFootListener = builder.startOnFootListener;
+            this.stopOnFootListener = builder.stopOnFootListener;
+            this.pluggingHeadphoneListener = builder.pluggingHeadphoneListener;
+            this.unpluggingHeadphoneListener = builder.unpluggingHeadphoneListener;
         }
 
         public OnErrorListener getErrorListener() {
@@ -103,12 +123,28 @@ public interface AwarenessComponent extends RequiredPermissions {
             return disconnectedListener != null ? disconnectedListener : () -> {};
         }
 
-        public OnStartDrivingListener getStartDrivingListener() {
-            return startDrivingListener != null ? startDrivingListener : ignored -> {};
+        public OnStartInVehicleListener getStartInVehicleListener() {
+            return startInVehicleListener != null ? startInVehicleListener : ignored -> {};
         }
 
-        public OnStopDrivingListener getStopDrivingListener() {
-            return stopDrivingListener != null ? stopDrivingListener : ignored -> {};
+        public OnStopInVehicleListener getStopInVehicleListener() {
+            return stopInVehicleListener != null ? stopInVehicleListener : ignored -> {};
+        }
+
+        public OnStartOnFootListener getStartOnFootListener() {
+            return startOnFootListener != null ? startOnFootListener : ignored -> {};
+        }
+
+        public OnStopOnFootListener getStopOnFootListener() {
+            return stopOnFootListener != null ? stopOnFootListener : ignored -> {};
+        }
+
+        public OnPluggingHeadphoneListener getPluggingHeadphoneListener() {
+            return pluggingHeadphoneListener != null ? pluggingHeadphoneListener : ignored -> {};
+        }
+
+        public OnUnpluggingHeadphoneListener getUnpluggingHeadphoneListener() {
+            return unpluggingHeadphoneListener != null ? unpluggingHeadphoneListener : ignored -> {};
         }
 
         /**
@@ -118,8 +154,12 @@ public interface AwarenessComponent extends RequiredPermissions {
             private OnErrorListener errorListener;
             private OnConnectedListener connectedListener;
             private OnDisconnectedListener disconnectedListener;
-            private OnStartDrivingListener startDrivingListener;
-            private OnStopDrivingListener stopDrivingListener;
+            private OnStartInVehicleListener startInVehicleListener;
+            private OnStopInVehicleListener stopInVehicleListener;
+            private OnStartOnFootListener startOnFootListener;
+            private OnStopOnFootListener stopOnFootListener;
+            private OnPluggingHeadphoneListener pluggingHeadphoneListener;
+            private OnUnpluggingHeadphoneListener unpluggingHeadphoneListener;
 
             public Builder setErrorListener(OnErrorListener errorListener) {
                 this.errorListener = errorListener;
@@ -136,13 +176,33 @@ public interface AwarenessComponent extends RequiredPermissions {
                 return this;
             }
 
-            public Builder setStartDrivingListener(OnStartDrivingListener startDrivingListener) {
-                this.startDrivingListener = startDrivingListener;
+            public Builder setStartInVehicleListener(OnStartInVehicleListener startInVehicleListener) {
+                this.startInVehicleListener = startInVehicleListener;
                 return this;
             }
 
-            public Builder setStopDrivingListener(OnStopDrivingListener stopDrivingListener) {
-                this.stopDrivingListener = stopDrivingListener;
+            public Builder setStopInVehicleListener(OnStopInVehicleListener stopInVehicleListener) {
+                this.stopInVehicleListener = stopInVehicleListener;
+                return this;
+            }
+
+            public Builder setStartOnFootListener(OnStartOnFootListener startOnFootListener) {
+                this.startOnFootListener = startOnFootListener;
+                return this;
+            }
+
+            public Builder setStopOnFootListener(OnStopOnFootListener stopOnFootListener) {
+                this.stopOnFootListener = stopOnFootListener;
+                return this;
+            }
+
+            public Builder setPluggingHeadphoneListener(OnPluggingHeadphoneListener pluggingHeadphoneListener) {
+                this.pluggingHeadphoneListener = pluggingHeadphoneListener;
+                return this;
+            }
+
+            public Builder setUnpluggingHeadphoneListener(OnUnpluggingHeadphoneListener unpluggingHeadphoneListener) {
+                this.unpluggingHeadphoneListener = unpluggingHeadphoneListener;
                 return this;
             }
 
@@ -157,6 +217,17 @@ public interface AwarenessComponent extends RequiredPermissions {
      * Handles Utilities related to this component
      */
     class Utils {
+        public static String getFenceStateAsString(int state) {
+            switch (state) {
+                case FenceState.TRUE:
+                    return "TRUE";
+                case FenceState.FALSE:
+                    return "FALSE";
+                case FenceState.UNKNOWN:
+                    return "UNKNOWN";
+            }
+            return "UNKNOWN_STATE";
+        }
     }
 
     /**
@@ -179,10 +250,22 @@ public interface AwarenessComponent extends RequiredPermissions {
     interface OnDisconnectedListener {
         void execute();
     }
-    interface OnStartDrivingListener {
+    interface OnStartOnFootListener {
         void execute(FenceState fenceState);
     }
-    interface OnStopDrivingListener {
+    interface OnStopOnFootListener {
+        void execute(FenceState fenceState);
+    }
+    interface OnStartInVehicleListener {
+        void execute(FenceState fenceState);
+    }
+    interface OnStopInVehicleListener {
+        void execute(FenceState fenceState);
+    }
+    interface OnPluggingHeadphoneListener {
+        void execute(FenceState fenceState);
+    }
+    interface OnUnpluggingHeadphoneListener {
         void execute(FenceState fenceState);
     }
 }
