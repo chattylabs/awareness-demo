@@ -7,7 +7,9 @@ import android.content.Intent;
 import android.os.Build;
 import android.os.VibrationEffect;
 import android.os.Vibrator;
+import android.util.Log;
 import android.util.Pair;
+import android.widget.Toast;
 
 import com.chattylabs.module.awareness.AwarenessComponent;
 import com.chattylabs.module.awareness.AwarenessComponentImpl;
@@ -49,13 +51,29 @@ public class AwarenessServiceDelegate implements ServiceDelegate {
                 .setErrorListener(ex -> {
                     csvWriter.write(context, Pair.create(Trace.ERROR, ex.getMessage()));
                 })
-                .setStartDrivingListener(fenceState -> {
+                .setStartInVehicleListener(fenceState -> {
                     vibrateForStart(context);
                     csvWriter.write(context, Pair.create(AwarenessComponent.LOG_STARTED_DRIVING, Trace.TRUE));
                 })
-                .setStopDrivingListener(fenceState -> {
+                .setStopInVehicleListener(fenceState -> {
                     vibrateForStop(context);
                     csvWriter.write(context, Pair.create(AwarenessComponent.LOG_STOPPED_DRIVING, Trace.TRUE));
+                })
+                .setStartOnFootListener(fenceState -> {
+                    Log.i("DEMO", "ON_FOOT START: " + AwarenessComponent.Utils.getFenceStateAsString(fenceState.getCurrentState()));
+                })
+                .setStopOnFootListener(fenceState -> {
+                    Log.i("DEMO", "ON_FOOT STOP: " + AwarenessComponent.Utils.getFenceStateAsString(fenceState.getCurrentState()));
+                })
+                .setPluggingHeadphoneListener(fenceState -> {
+                    String message = "Plugging Headphone: " + AwarenessComponent.Utils.getFenceStateAsString(fenceState.getCurrentState());
+                    Log.i("DEMO", message);
+                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
+                })
+                .setUnpluggingHeadphoneListener(fenceState -> {
+                    String message = "Unplugging Headphone: " + AwarenessComponent.Utils.getFenceStateAsString(fenceState.getCurrentState());
+                    Log.i("DEMO", message);
+                    Toast.makeText(context, message, Toast.LENGTH_LONG).show();
                 });
     }
 
@@ -73,10 +91,6 @@ public class AwarenessServiceDelegate implements ServiceDelegate {
             awarenessComponent = AwarenessComponent.Singleton.getInstance();
             if (awarenessComponent == null) {
                 awarenessComponent = new AwarenessComponentImpl(application, clazz);
-                awarenessComponent.register(application, new int[]{
-                        AwarenessComponent.Fences.STARTING_ON_FOOT,
-                        AwarenessComponent.Fences.STOPPING_ON_FOOT
-                });
                 csvWriter.write(application, Pair.create(AwarenessComponent.LOG_COMPONENT_STARTED, Trace.TRUE));
             }
         }

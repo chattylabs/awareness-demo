@@ -20,7 +20,9 @@ public class MainActivity extends AppCompatActivity {
             new AwarenessComponentImpl(getApplication(), GeneralIntentService.class)
                     .register(this, new int[]{
                             AwarenessComponent.Fences.STARTING_ON_FOOT,
-                            AwarenessComponent.Fences.STOPPING_ON_FOOT
+                            AwarenessComponent.Fences.STOPPING_ON_FOOT,
+                            AwarenessComponent.Fences.PLUGGING_HEADPHONE,
+                            AwarenessComponent.Fences.UNPLUGGING_HEADPHONE
                     });
         });
 

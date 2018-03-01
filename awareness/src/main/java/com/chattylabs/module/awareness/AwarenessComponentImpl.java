@@ -15,6 +15,7 @@ import com.google.android.gms.awareness.fence.AwarenessFence;
 import com.google.android.gms.awareness.fence.DetectedActivityFence;
 import com.google.android.gms.awareness.fence.FenceState;
 import com.google.android.gms.awareness.fence.FenceUpdateRequest;
+import com.google.android.gms.awareness.fence.HeadphoneFence;
 import com.google.android.gms.common.api.GoogleApiClient;
 
 public class AwarenessComponentImpl implements AwarenessComponent {
@@ -53,15 +54,30 @@ public class AwarenessComponentImpl implements AwarenessComponent {
 
     private FenceUpdateRequest buildFencesToRegister(PendingIntent pendingIntent, @Fences.Items int[] fences) {
         FenceUpdateRequest.Builder builder = new FenceUpdateRequest.Builder();
+        AwarenessFence awarenessFence;
         for (int fence : fences) {
             switch (fence) {
+                case Fences.STARTING_IN_VEHICLE:
+                    awarenessFence = DetectedActivityFence.starting(DetectedActivityFence.IN_VEHICLE);
+                    builder.addFence(Fences.START_IN_VEHICLE_KEY, awarenessFence, pendingIntent);
+                    break;
+                case Fences.STOPPING_IN_VEHICLE:
+                    awarenessFence = DetectedActivityFence.stopping(DetectedActivityFence.IN_VEHICLE);
+                    builder.addFence(Fences.STOP_IN_VEHICLE_KEY, awarenessFence, pendingIntent);
+                    break;
                 case Fences.STARTING_ON_FOOT:
-                    AwarenessFence startInVehicleFence = DetectedActivityFence.starting(DetectedActivityFence.ON_FOOT);
-                    builder = builder.addFence(START_IN_VEHICLE_FENCE, startInVehicleFence, pendingIntent);
+                    awarenessFence = DetectedActivityFence.starting(DetectedActivityFence.ON_FOOT);
+                    builder.addFence(Fences.START_ON_FOOT_KEY, awarenessFence, pendingIntent);
                     break;
                 case Fences.STOPPING_ON_FOOT:
-                    AwarenessFence stopInVehicleFence = DetectedActivityFence.stopping(DetectedActivityFence.ON_FOOT);
-                    builder = builder.addFence(STOP_IN_VEHICLE_FENCE, stopInVehicleFence, pendingIntent);
+                    awarenessFence = DetectedActivityFence.stopping(DetectedActivityFence.ON_FOOT);
+                    builder.addFence(Fences.STOP_ON_FOOT_KEY, awarenessFence, pendingIntent);
+                    break;
+                case Fences.PLUGGING_HEADPHONE:
+                    builder.addFence(Fences.PLUG_HEADPHONE_KEY, HeadphoneFence.pluggingIn(), pendingIntent);
+                    break;
+                case Fences.UNPLUGGING_HEADPHONE:
+                    builder.addFence(Fences.UNPLUG_HEADPHONE_KEY, HeadphoneFence.unplugging(), pendingIntent);
                     break;
             }
         }
@@ -84,11 +100,23 @@ public class AwarenessComponentImpl implements AwarenessComponent {
         FenceUpdateRequest.Builder builder = new FenceUpdateRequest.Builder();
         for (int fence : fences) {
             switch (fence) {
+                case Fences.STARTING_IN_VEHICLE:
+                    builder.removeFence(Fences.START_IN_VEHICLE_KEY);
+                    break;
+                case Fences.STOPPING_IN_VEHICLE:
+                    builder.removeFence(Fences.STOP_IN_VEHICLE_KEY);
+                    break;
                 case Fences.STARTING_ON_FOOT:
-                    builder.removeFence(START_IN_VEHICLE_FENCE);
+                    builder.removeFence(Fences.START_ON_FOOT_KEY);
                     break;
                 case Fences.STOPPING_ON_FOOT:
-                    builder.removeFence(STOP_IN_VEHICLE_FENCE);
+                    builder.removeFence(Fences.STOP_ON_FOOT_KEY);
+                    break;
+                case Fences.PLUGGING_HEADPHONE:
+                    builder.removeFence(Fences.PLUG_HEADPHONE_KEY);
+                    break;
+                case Fences.UNPLUGGING_HEADPHONE:
+                    builder.removeFence(Fences.UNPLUG_HEADPHONE_KEY);
                     break;
             }
         }
@@ -101,11 +129,23 @@ public class AwarenessComponentImpl implements AwarenessComponent {
         String fenceKey = fenceState.getFenceKey();
         if (!TextUtils.isEmpty(fenceKey)) {
             switch (fenceKey) {
-                case START_IN_VEHICLE_FENCE:
-                    callbacks.getStartDrivingListener().execute(fenceState);
+                case Fences.START_IN_VEHICLE_KEY:
+                    callbacks.getStartInVehicleListener().execute(fenceState);
                     break;
-                case STOP_IN_VEHICLE_FENCE:
-                    callbacks.getStopDrivingListener().execute(fenceState);
+                case Fences.STOP_IN_VEHICLE_KEY:
+                    callbacks.getStopInVehicleListener().execute(fenceState);
+                    break;
+                case Fences.START_ON_FOOT_KEY:
+                    callbacks.getStartOnFootListener().execute(fenceState);
+                    break;
+                case Fences.STOP_ON_FOOT_KEY:
+                    callbacks.getStopOnFootListener().execute(fenceState);
+                    break;
+                case Fences.PLUG_HEADPHONE_KEY:
+                    callbacks.getPluggingHeadphoneListener().execute(fenceState);
+                    break;
+                case Fences.UNPLUG_HEADPHONE_KEY:
+                    callbacks.getUnpluggingHeadphoneListener().execute(fenceState);
                     break;
             }
         }
