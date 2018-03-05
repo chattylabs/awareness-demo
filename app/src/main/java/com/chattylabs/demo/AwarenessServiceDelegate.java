@@ -104,7 +104,7 @@ public class AwarenessServiceDelegate implements ServiceDelegate {
     }
 
     @Override
-    public void onStartCommand(Application application, Intent intent) {
+    public void onHandleIntent(Application application, Intent intent) {
         if (awarenessComponent != null) awarenessComponent.process(intent, getGeneralCallbackBuilder(application).build());
     }
 

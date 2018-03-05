@@ -61,7 +61,7 @@ public class GeneralForegroundService extends Service {
                     stopSelf();
                 }
             } else {
-                serviceDelegate.onStartCommand(getApplication(), intent);
+                serviceDelegate.onHandleIntent(getApplication(), intent);
             }
         }
         return START_STICKY;
