@@ -7,7 +7,7 @@ import android.content.Intent;
 
 public interface ServiceDelegate {
     <T extends Class<? extends Service>> void onCreate(Application application, T clazz);
-    void onStartCommand(Application application, Intent intent);
+    void onHandleIntent(Application application, Intent intent);
     void onTrimMemory(Application application, int level);
     void onLowMemory(Application application);
     void onDestroy(Application application);

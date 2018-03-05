@@ -14,13 +14,14 @@ def readVersion() {
     // safety defaults in case file is missing
     if(!version['major']) version['major'] = "0"
     if(!version['minor']) version['minor'] = "1"
+    if(!version['patch']) version['patch'] = "0"
     if(!version['build']) version['build'] = "1"
     return version
 }
 
 ext.readVersionName = {
     def version = readVersion()
-    return "${version['major']}.${version['minor']}"
+    return "${version['major']}.${version['minor']}.${version['patch']}"
 }
 
 ext.readVersionCode = {

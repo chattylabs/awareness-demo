@@ -10,7 +10,7 @@ android {
         versionCode readVersionCode()
         versionName readVersionName()
         //vectorDrawables.useSupportLibrary = true
-        multiDexEnabled true
+        //multiDexEnabled true
     }
 
     compileOptions {

@@ -34,7 +34,7 @@ public class GeneralIntentService extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         if (intent != null) {
-            serviceDelegate.onStartCommand(getApplication(), intent);
+            serviceDelegate.onHandleIntent(getApplication(), intent);
         }
     }
 
