@@ -18,16 +18,12 @@ import java.lang.ref.WeakReference;
 public interface AwarenessComponent extends RequiredPermissions {
     String TAG = Tag.make(AwarenessComponent.class);
 
-    // Log constants
-    String LOG_AWARENESS_FILENAME = "AWARENESS_COMPONENT";
-    String LOG_STARTED_DRIVING = "LOG_STARTED_DRIVING";
-    String LOG_STOPPED_DRIVING = "LOG_STOPPED_DRIVING";
-    String LOG_COMPONENT_STARTED = "LOG_COMPONENT_STARTED";
+    String SDK_PACKAGE = "com.chattylabs.sdk.android.awareness";
 
     /**
      * Intent filter actions
      */
-    String ACTION_FENCE = BuildConfig.APPLICATION_ID + ".action.FENCE";
+    String ACTION_FENCE = SDK_PACKAGE + ".action.FENCE";
 
     /**
      * Intent extras
@@ -192,16 +188,16 @@ public interface AwarenessComponent extends RequiredPermissions {
          * Fences keys
          */
         class Key {
-            final static String START_IN_VEHICLE_KEY = BuildConfig.APPLICATION_ID + ".key.startInVehicleFenceKey";
-            final static String STOP_IN_VEHICLE_KEY = BuildConfig.APPLICATION_ID + ".key.stopInVehicleFenceKey";
-            final static String START_ON_FOOT_KEY = BuildConfig.APPLICATION_ID + ".key.startOnFootFenceKey";
-            final static String STOP_ON_FOOT_KEY = BuildConfig.APPLICATION_ID + ".key.stopOnFootFenceKey";
-            final static String PLUG_HEADPHONE_KEY = BuildConfig.APPLICATION_ID + ".key.plugHeadphoneFenceKey";
-            final static String UNPLUG_HEADPHONE_KEY = BuildConfig.APPLICATION_ID + ".key.unplugHeadphoneFenceKey";
-            final static String START_STILL_KEY = BuildConfig.APPLICATION_ID + ".key.startStillFenceKey";
-            final static String STOP_STILL_KEY = BuildConfig.APPLICATION_ID + ".key.stopStillFenceKey";
-            final static String ON_STILL_KEY = BuildConfig.APPLICATION_ID + ".key.onStillFenceKey";
-            final static String ON_FOOT_KEY = BuildConfig.APPLICATION_ID + ".key.onFootFenceKey";
+            final static String START_IN_VEHICLE_KEY = SDK_PACKAGE + ".key.startInVehicleFenceKey";
+            final static String STOP_IN_VEHICLE_KEY = SDK_PACKAGE + ".key.stopInVehicleFenceKey";
+            final static String START_ON_FOOT_KEY = SDK_PACKAGE + ".key.startOnFootFenceKey";
+            final static String STOP_ON_FOOT_KEY = SDK_PACKAGE + ".key.stopOnFootFenceKey";
+            final static String PLUG_HEADPHONE_KEY = SDK_PACKAGE + ".key.plugHeadphoneFenceKey";
+            final static String UNPLUG_HEADPHONE_KEY = SDK_PACKAGE + ".key.unplugHeadphoneFenceKey";
+            final static String START_STILL_KEY = SDK_PACKAGE + ".key.startStillFenceKey";
+            final static String STOP_STILL_KEY = SDK_PACKAGE + ".key.stopStillFenceKey";
+            final static String ON_STILL_KEY = SDK_PACKAGE + ".key.onStillFenceKey";
+            final static String ON_FOOT_KEY = SDK_PACKAGE + ".key.onFootFenceKey";
         }
 
         interface State {
