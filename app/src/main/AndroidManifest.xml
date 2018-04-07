@@ -9,16 +9,19 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name="com.chattylabs.demo.MainActivity">
+        <activity android:name="com.chattylabs.demo.MainActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenSize"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <service android:name="com.chattylabs.demo.GeneralIntentService" android:exported="false">
-            <intent-filter>
-                <action android:name="com.chattylabs.module.awareness.FENCE_ACTION" />
+        <service android:name="com.chattylabs.demo.CommonIntentService"
+            android:exported="false">
+            <intent-filter android:priority="999">
+                <action android:name="com.chattylabs.sdk.android.awareness.action.FENCE" />
             </intent-filter>
         </service>
     </application>
