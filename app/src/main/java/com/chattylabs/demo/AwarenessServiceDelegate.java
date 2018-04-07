@@ -20,11 +20,13 @@ import com.chattylabs.sdk.android.core.CsvWriter;
 import com.chattylabs.sdk.android.core.ServiceDelegate;
 
 import static com.chattylabs.sdk.android.awareness.AwarenessComponent.*;
-import static com.chattylabs.sdk.android.awareness.AwarenessComponent.LOG_STARTED_DRIVING;
 
 public class AwarenessServiceDelegate implements ServiceDelegate {
 
     private static final String CHANNEL_ID = "CHANNEL_1";
+    public static final String LOG_STARTED_DRIVING = "LOG_STARTED_DRIVING";
+    public static final String LOG_STOPPED_DRIVING = "LOG_STOPPED_DRIVING";
+    public static final String LOG_COMPONENT_STARTED = "LOG_COMPONENT_STARTED";
     private CsvWriter csvWriter;
     private AwarenessComponent awarenessComponent;
 
@@ -86,7 +88,7 @@ public class AwarenessServiceDelegate implements ServiceDelegate {
 
         if (csvWriter == null) {
             csvWriter = CsvWriter.getInstance();
-            initLog(application, LOG_AWARENESS_FILENAME);
+            initLog(application, "LOG_AWARENESS_FILENAME");
         }
         csvWriter.write(application, Pair.create(Trace.SERVICE_CREATED, Trace.TRUE));
 
@@ -176,6 +178,6 @@ public class AwarenessServiceDelegate implements ServiceDelegate {
     private void initLog(Context context, String activityString) {
         csvWriter.init(activityString, ";", "-");
         csvWriter.addHeaders(context, LOG_STARTED_DRIVING, LOG_STOPPED_DRIVING, LOG_COMPONENT_STARTED,
-                       Trace.SERVICE_CREATED, Trace.SERVICE_DESTROYED, Trace.ON_TRIM_MEMORY, Trace.ON_LOW_MEMORY, Trace.ERROR);
+                             Trace.SERVICE_CREATED, Trace.SERVICE_DESTROYED, Trace.ON_TRIM_MEMORY, Trace.ON_LOW_MEMORY, Trace.ERROR);
     }
 }
