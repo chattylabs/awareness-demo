@@ -9,6 +9,6 @@ public class OnUpgradeReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.w("OnUpgradeReceiver", "Device upgraded!");
-        GeneralForegroundService.start(context.getApplicationContext());
+        //CommonService.start(context.getApplicationContext());
     }
 }

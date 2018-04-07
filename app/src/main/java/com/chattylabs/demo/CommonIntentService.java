@@ -5,10 +5,11 @@ import android.content.Intent;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.chattylabs.module.base.ServiceDelegate;
+import com.chattylabs.sdk.android.core.ServiceDelegate;
 
-public class GeneralIntentService extends IntentService {
-    public static final String TAG = "GeneralIntentService";
+
+public class CommonIntentService extends IntentService {
+    public static final String TAG = "CommonIntentService";
 
     private static boolean connected;
 
@@ -19,7 +20,7 @@ public class GeneralIntentService extends IntentService {
         return connected;
     }
 
-    public GeneralIntentService() {
+    public CommonIntentService() {
         super(TAG);
         this.serviceDelegate = new AwarenessServiceDelegate();
     }

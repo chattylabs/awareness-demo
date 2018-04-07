@@ -1,1 +1,1 @@
-include ':app', ':buildsystem', ':base', ':awareness'
+include ':app', ':buildsystem', ':awareness'

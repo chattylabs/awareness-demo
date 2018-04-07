@@ -8,26 +8,24 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
 
-import com.chattylabs.module.base.ServiceDelegate;
-
-public class GeneralForegroundService extends Service {
+public class CommonService extends Service {
 
     public static String START_FOREGROUND_SERVICE_COMMAND = "START_FOREGROUND_SERVICE_COMMAND";
     public static final int ID = 222;
     private static boolean connected;
 
     // Trial components
-    ServiceDelegate serviceDelegate;
+    //ServiceDelegate serviceDelegate;
 
     public static void start(Context context) {
-        Intent intent = new Intent(context, GeneralForegroundService.class);
-        intent.putExtra(GeneralForegroundService.START_FOREGROUND_SERVICE_COMMAND, true);
+        Intent intent = new Intent(context, CommonService.class);
+        intent.putExtra(CommonService.START_FOREGROUND_SERVICE_COMMAND, true);
         context.startService(intent);
     }
 
     public static void stop(Context context) {
-        Intent intent = new Intent(context, GeneralForegroundService.class);
-        intent.putExtra(GeneralForegroundService.START_FOREGROUND_SERVICE_COMMAND, false);
+        Intent intent = new Intent(context, CommonService.class);
+        intent.putExtra(CommonService.START_FOREGROUND_SERVICE_COMMAND, false);
         context.startService(intent);
     }
 
@@ -35,7 +33,7 @@ public class GeneralForegroundService extends Service {
         return connected;
     }
 
-    public GeneralForegroundService() {
+    public CommonService() {
         //this.serviceDelegate = new ServiceDelegate();
     }
 
@@ -43,7 +41,7 @@ public class GeneralForegroundService extends Service {
     public void onCreate() {
         super.onCreate();
         connected = true;
-        serviceDelegate.onCreate(getApplication(), this.getClass());
+        //serviceDelegate.onCreate(getApplication(), this.getClass());
     }
 
     @Override
@@ -61,7 +59,7 @@ public class GeneralForegroundService extends Service {
                     stopSelf();
                 }
             } else {
-                serviceDelegate.onHandleIntent(getApplication(), intent);
+                //serviceDelegate.onHandleIntent(getApplication(), intent);
             }
         }
         return START_STICKY;
@@ -70,19 +68,19 @@ public class GeneralForegroundService extends Service {
     @Override
     public void onTrimMemory(int level) {
         super.onTrimMemory(level);
-        serviceDelegate.onTrimMemory(getApplication(), level);
+        //serviceDelegate.onTrimMemory(getApplication(), level);
     }
 
     @Override
     public void onDestroy() {
-        serviceDelegate.onDestroy(getApplication());
+        //serviceDelegate.onDestroy(getApplication());
         connected = false;
         super.onDestroy();
     }
 
     @Override
     public void onLowMemory() {
-        serviceDelegate.onLowMemory(getApplication());
+        //serviceDelegate.onLowMemory(getApplication());
         super.onLowMemory();
     }
 

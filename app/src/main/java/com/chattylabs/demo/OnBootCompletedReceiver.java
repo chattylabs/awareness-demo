@@ -9,6 +9,6 @@ public class OnBootCompletedReceiver extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         Log.w("OnBootCompletedReceiver", "Device rebooted!");
-        GeneralForegroundService.start(context.getApplicationContext());
+        //CommonService.start(context.getApplicationContext());
     }
 }

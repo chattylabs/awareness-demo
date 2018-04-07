@@ -5,14 +5,13 @@ ext {
     androidMinSdkVersion = 21 //18
     androidTargetSdkVersion = 24
     androidCompileSdkVersion = 27
-    supportVersion = '27.0.2'
-    playServiceVersion = '11.8.0'
+    supportVersion = '27.1.0'
+    playServiceVersion = '12.0.0'
     firebaseVersion = playServiceVersion
     constraintVersion = '1.0.2'
-    awarenessVersion = '9.4.0'
 
     //Libraries
-    daggerVersion = '2.11'
+    daggerVersion = '2.15'
     rxJavaVersion = '2.1.1'
     rxAndroidVersion = '2.0.1'
     javaxInjectVersion = '1'
@@ -24,4 +23,15 @@ ext {
     assertJVersion = '3.8.0'
     mockitoVersion = '2.13.0'
     robolectricVersion = '3.4.2'
+
+    dagger = [
+            "com.google.dagger:dagger:$daggerVersion",
+            "com.google.dagger:dagger-android:$daggerVersion",
+            "com.google.dagger:dagger-android-support:$daggerVersion",
+    ]
+
+    daggerProcessor = [
+            "com.google.dagger:dagger-compiler:$daggerVersion",
+            "com.google.dagger:dagger-android-processor:$daggerVersion",
+    ]
 }
