@@ -7,7 +7,6 @@ android {
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
 
         //manifestPlaceholders = [HOCKEYAPP_APP_ID: "658862d7f4d34d89b96ae8356aafdb05"]
-        manifestPlaceholders = [AWARENESS_API_KEY: "AIzaSyCqfpLmdNurYfgaJ5opgEVcWmSlNfP1QUQ"]
     }
     signingConfigs {
         debug {

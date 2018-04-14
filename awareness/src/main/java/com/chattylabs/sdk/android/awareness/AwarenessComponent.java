@@ -112,7 +112,8 @@ public interface AwarenessComponent extends RequiredPermissions {
             @Fences.Items
             @Override
             public int getFence() {
-                switch (fenceKey) {
+                String packageName = intent.getPackage() != null ? intent.getPackage() : "";
+                switch (fenceKey.replace(packageName, "")) {
                     case Fences.Key.START_IN_VEHICLE_KEY:
                         return Fences.STARTING_IN_VEHICLE;
                     case Fences.Key.STOP_IN_VEHICLE_KEY:
@@ -129,10 +130,10 @@ public interface AwarenessComponent extends RequiredPermissions {
                         return Fences.STARTING_STILL;
                     case Fences.Key.STOP_STILL_KEY:
                         return Fences.STOPPING_STILL;
-                    case Fences.Key.ON_STILL_KEY:
+                    case Fences.Key.DURING_STILL_KEY:
                         return Fences.DURING_STILL;
-                    case Fences.Key.ON_FOOT_KEY:
-                        return Fences.DURING_ON_FOOT;
+                    case Fences.Key.DURING_FOOT_KEY:
+                        return Fences.DURING_FOOT;
                     default: return Fences.UNKNOWN;
                 }
             }
@@ -169,6 +170,7 @@ public interface AwarenessComponent extends RequiredPermissions {
         int UNKNOWN = -1;
         int STARTING_ON_FOOT = 1;
         int STOPPING_ON_FOOT = 2;
+        int DURING_FOOT = 10;
         int STARTING_IN_VEHICLE = 3;
         int STOPPING_IN_VEHICLE = 4;
         int PLUGGING_HEADPHONE = 5;
@@ -176,28 +178,27 @@ public interface AwarenessComponent extends RequiredPermissions {
         int STARTING_STILL = 7;
         int STOPPING_STILL = 8;
         int DURING_STILL = 9;
-        int DURING_ON_FOOT = 10;
 
         @Retention(RetentionPolicy.SOURCE)
         @IntDef({UNKNOWN, STARTING_ON_FOOT, STOPPING_ON_FOOT, STARTING_IN_VEHICLE,
                         STOPPING_IN_VEHICLE, PLUGGING_HEADPHONE, UNPLUGGING_HEADPHONE,
-                        STARTING_STILL, STOPPING_STILL, DURING_STILL, DURING_ON_FOOT})
+                        STARTING_STILL, STOPPING_STILL, DURING_STILL, DURING_FOOT})
         @interface Items {}
 
         /**
          * Fences keys
          */
         class Key {
-            final static String START_IN_VEHICLE_KEY = SDK_PACKAGE + ".key.startInVehicleFenceKey";
-            final static String STOP_IN_VEHICLE_KEY = SDK_PACKAGE + ".key.stopInVehicleFenceKey";
-            final static String START_ON_FOOT_KEY = SDK_PACKAGE + ".key.startOnFootFenceKey";
-            final static String STOP_ON_FOOT_KEY = SDK_PACKAGE + ".key.stopOnFootFenceKey";
-            final static String PLUG_HEADPHONE_KEY = SDK_PACKAGE + ".key.plugHeadphoneFenceKey";
-            final static String UNPLUG_HEADPHONE_KEY = SDK_PACKAGE + ".key.unplugHeadphoneFenceKey";
-            final static String START_STILL_KEY = SDK_PACKAGE + ".key.startStillFenceKey";
-            final static String STOP_STILL_KEY = SDK_PACKAGE + ".key.stopStillFenceKey";
-            final static String ON_STILL_KEY = SDK_PACKAGE + ".key.onStillFenceKey";
-            final static String ON_FOOT_KEY = SDK_PACKAGE + ".key.onFootFenceKey";
+            final static String START_IN_VEHICLE_KEY = ".awareness.key.startInVehicleFence";
+            final static String STOP_IN_VEHICLE_KEY = ".awareness.key.stopInVehicleFence";
+            final static String START_ON_FOOT_KEY = ".awareness.key.startOnFootFence";
+            final static String STOP_ON_FOOT_KEY = ".awareness.key.stopOnFootFence";
+            final static String DURING_FOOT_KEY = ".awareness.key.duringFootFence";
+            final static String PLUG_HEADPHONE_KEY = ".awareness.key.plugHeadphoneFence";
+            final static String UNPLUG_HEADPHONE_KEY = ".awareness.key.unplugHeadphoneFence";
+            final static String START_STILL_KEY = ".awareness.key.startStillFence";
+            final static String STOP_STILL_KEY = ".awareness.key.stopStillFence";
+            final static String DURING_STILL_KEY = ".awareness.key.duringStillFence";
         }
 
         interface State {
@@ -250,6 +251,8 @@ public interface AwarenessComponent extends RequiredPermissions {
                 return "STARTING_ON_FOOT";
             case Fences.STOPPING_ON_FOOT:
                 return "STOPPING_ON_FOOT";
+            case Fences.DURING_FOOT:
+                return "DURING_FOOT";
             case Fences.STARTING_IN_VEHICLE:
                 return "STARTING_IN_VEHICLE";
             case Fences.STOPPING_IN_VEHICLE:
@@ -264,8 +267,6 @@ public interface AwarenessComponent extends RequiredPermissions {
                 return "STOPPING_STILL";
             case Fences.DURING_STILL:
                 return "DURING_STILL";
-            case Fences.DURING_ON_FOOT:
-                return "DURING_ON_FOOT";
         }
         return "UNKNOWN";
     }

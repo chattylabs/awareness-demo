@@ -2,9 +2,5 @@
     package="com.chattylabs.sdk.android.awareness">
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="com.google.android.gms.permission.ACTIVITY_RECOGNITION" />
-    <application>
-        <meta-data
-            android:name="com.google.android.awareness.API_KEY"
-            android:value="${AWARENESS_API_KEY}"/>
-    </application>
+    <application />
 </manifest>

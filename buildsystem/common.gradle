@@ -29,12 +29,12 @@ android {
     }
 
     lintOptions {
-        quiet true
-        abortOnError false
+        quiet false
+        abortOnError true
         ignoreWarnings true
         //Some libraries have issues with this.
         disable 'InvalidPackage'
-        disable 'OldTargetApi'
+        //disable 'OldTargetApi'
         //Lint gives this warning but SDK 20 would be Android L Beta.
         //disable 'IconDensities'
         //For testing purpose. This is safe to remove.

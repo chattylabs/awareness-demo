@@ -58,7 +58,7 @@ final class AwarenessComponentImpl implements AwarenessComponent {
     public void register(@NonNull Context context, @Fences.Items int[] fences,
                          @NonNull AwarenessListener... listeners) {
         PendingIntent pendingIntent = getIntentServicePendingIntent(context);
-        Awareness.getFenceClient(context).updateFences(buildFencesToRegister(pendingIntent, fences))
+        Awareness.getFenceClient(context).updateFences(buildFencesToRegister(context, pendingIntent, fences))
                 .addOnSuccessListener(aVoid -> {
                     for (AwarenessListener l: listeners)
                         if (OnSuccess.class.isInstance(l)) {
@@ -104,7 +104,7 @@ final class AwarenessComponentImpl implements AwarenessComponent {
     @Override
     public void unregister(@NonNull Context context, @Fences.Items int[] fences,
                            @NonNull AwarenessListener... listeners) {
-        Awareness.getFenceClient(context).updateFences(buildFencesToUnregister(fences))
+        Awareness.getFenceClient(context).updateFences(buildFencesToUnregister(context, fences))
                  .addOnSuccessListener(aVoid -> {
                      for (AwarenessListener l: listeners)
                          if (OnSuccess.class.isInstance(l)) {
@@ -123,87 +123,87 @@ final class AwarenessComponentImpl implements AwarenessComponent {
                  });
     }
 
-    private FenceUpdateRequest buildFencesToRegister(PendingIntent pendingIntent, @Fences.Items int[] fences) {
+    private FenceUpdateRequest buildFencesToRegister(Context context, PendingIntent pendingIntent, @Fences.Items int[] fences) {
         FenceUpdateRequest.Builder builder = new FenceUpdateRequest.Builder();
         AwarenessFence awarenessFence;
         for (int fence : fences) {
             switch (fence) {
                 case Fences.STARTING_IN_VEHICLE:
                     awarenessFence = DetectedActivityFence.starting(DetectedActivityFence.IN_VEHICLE);
-                    builder.addFence(Fences.Key.START_IN_VEHICLE_KEY, awarenessFence, pendingIntent);
+                    builder.addFence(context.getPackageName() + Fences.Key.START_IN_VEHICLE_KEY, awarenessFence, pendingIntent);
                     break;
                 case Fences.STOPPING_IN_VEHICLE:
                     awarenessFence = DetectedActivityFence.stopping(DetectedActivityFence.IN_VEHICLE);
-                    builder.addFence(Fences.Key.STOP_IN_VEHICLE_KEY, awarenessFence, pendingIntent);
+                    builder.addFence(context.getPackageName() + Fences.Key.STOP_IN_VEHICLE_KEY, awarenessFence, pendingIntent);
                     break;
                 case Fences.STARTING_ON_FOOT:
                     awarenessFence = DetectedActivityFence.starting(DetectedActivityFence.ON_FOOT);
-                    builder.addFence(Fences.Key.START_ON_FOOT_KEY, awarenessFence, pendingIntent);
+                    builder.addFence(context.getPackageName() + Fences.Key.START_ON_FOOT_KEY, awarenessFence, pendingIntent);
                     break;
                 case Fences.STOPPING_ON_FOOT:
                     awarenessFence = DetectedActivityFence.stopping(DetectedActivityFence.ON_FOOT);
-                    builder.addFence(Fences.Key.STOP_ON_FOOT_KEY, awarenessFence, pendingIntent);
+                    builder.addFence(context.getPackageName() + Fences.Key.STOP_ON_FOOT_KEY, awarenessFence, pendingIntent);
                     break;
-                case Fences.DURING_ON_FOOT:
+                case Fences.DURING_FOOT:
                     awarenessFence = DetectedActivityFence.during(DetectedActivityFence.ON_FOOT);
-                    builder.addFence(Fences.Key.ON_FOOT_KEY, awarenessFence, pendingIntent);
+                    builder.addFence(context.getPackageName() + Fences.Key.DURING_FOOT_KEY, awarenessFence, pendingIntent);
                     break;
                 case Fences.PLUGGING_HEADPHONE:
-                    builder.addFence(Fences.Key.PLUG_HEADPHONE_KEY, HeadphoneFence.pluggingIn(), pendingIntent);
+                    builder.addFence(context.getPackageName() + Fences.Key.PLUG_HEADPHONE_KEY, HeadphoneFence.pluggingIn(), pendingIntent);
                     break;
                 case Fences.UNPLUGGING_HEADPHONE:
-                    builder.addFence(Fences.Key.UNPLUG_HEADPHONE_KEY, HeadphoneFence.unplugging(), pendingIntent);
+                    builder.addFence(context.getPackageName() + Fences.Key.UNPLUG_HEADPHONE_KEY, HeadphoneFence.unplugging(), pendingIntent);
                     break;
                 case Fences.STARTING_STILL:
                     awarenessFence = DetectedActivityFence.starting(DetectedActivityFence.STILL);
-                    builder.addFence(Fences.Key.START_STILL_KEY, awarenessFence, pendingIntent);
+                    builder.addFence(context.getPackageName() + Fences.Key.START_STILL_KEY, awarenessFence, pendingIntent);
                     break;
                 case Fences.STOPPING_STILL:
                     awarenessFence = DetectedActivityFence.stopping(DetectedActivityFence.STILL);
-                    builder.addFence(Fences.Key.STOP_STILL_KEY, awarenessFence, pendingIntent);
+                    builder.addFence(context.getPackageName() + Fences.Key.STOP_STILL_KEY, awarenessFence, pendingIntent);
                     break;
                 case Fences.DURING_STILL:
                     awarenessFence = DetectedActivityFence.during(DetectedActivityFence.STILL);
-                    builder.addFence(Fences.Key.ON_STILL_KEY, awarenessFence, pendingIntent);
+                    builder.addFence(context.getPackageName() + Fences.Key.DURING_STILL_KEY, awarenessFence, pendingIntent);
                     break;
             }
         }
         return builder.build();
     }
 
-    private FenceUpdateRequest buildFencesToUnregister(@Fences.Items int[] fences) {
+    private FenceUpdateRequest buildFencesToUnregister(Context context, @Fences.Items int[] fences) {
         FenceUpdateRequest.Builder builder = new FenceUpdateRequest.Builder();
         for (int fence : fences) {
             switch (fence) {
                 case Fences.STARTING_IN_VEHICLE:
-                    builder.removeFence(Fences.Key.START_IN_VEHICLE_KEY);
+                    builder.removeFence(context.getPackageName() + Fences.Key.START_IN_VEHICLE_KEY);
                     break;
                 case Fences.STOPPING_IN_VEHICLE:
-                    builder.removeFence(Fences.Key.STOP_IN_VEHICLE_KEY);
+                    builder.removeFence(context.getPackageName() + Fences.Key.STOP_IN_VEHICLE_KEY);
                     break;
                 case Fences.STARTING_ON_FOOT:
-                    builder.removeFence(Fences.Key.START_ON_FOOT_KEY);
+                    builder.removeFence(context.getPackageName() + Fences.Key.START_ON_FOOT_KEY);
                     break;
                 case Fences.STOPPING_ON_FOOT:
-                    builder.removeFence(Fences.Key.STOP_ON_FOOT_KEY);
+                    builder.removeFence(context.getPackageName() + Fences.Key.STOP_ON_FOOT_KEY);
                     break;
-                case Fences.DURING_ON_FOOT:
-                    builder.removeFence(Fences.Key.ON_FOOT_KEY);
+                case Fences.DURING_FOOT:
+                    builder.removeFence(context.getPackageName() + Fences.Key.DURING_FOOT_KEY);
                     break;
                 case Fences.PLUGGING_HEADPHONE:
-                    builder.removeFence(Fences.Key.PLUG_HEADPHONE_KEY);
+                    builder.removeFence(context.getPackageName() + Fences.Key.PLUG_HEADPHONE_KEY);
                     break;
                 case Fences.UNPLUGGING_HEADPHONE:
-                    builder.removeFence(Fences.Key.UNPLUG_HEADPHONE_KEY);
+                    builder.removeFence(context.getPackageName() + Fences.Key.UNPLUG_HEADPHONE_KEY);
                     break;
                 case Fences.STARTING_STILL:
-                    builder.removeFence(Fences.Key.START_STILL_KEY);
+                    builder.removeFence(context.getPackageName() + Fences.Key.START_STILL_KEY);
                     break;
                 case Fences.STOPPING_STILL:
-                    builder.removeFence(Fences.Key.STOP_STILL_KEY);
+                    builder.removeFence(context.getPackageName() + Fences.Key.STOP_STILL_KEY);
                     break;
                 case Fences.DURING_STILL:
-                    builder.removeFence(Fences.Key.ON_STILL_KEY);
+                    builder.removeFence(context.getPackageName() + Fences.Key.DURING_STILL_KEY);
                     break;
             }
         }
@@ -218,8 +218,7 @@ final class AwarenessComponentImpl implements AwarenessComponent {
     private PendingIntent getIntentServicePendingIntent(Context context) {
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling
         // requestActivityUpdates() and removeActivityUpdates().
-        return PendingIntent.getService(context, 0,
-                                        new Intent(ACTION_FENCE).setPackage(context.getPackageName()),
-                                        PendingIntent.FLAG_UPDATE_CURRENT);
+        return PendingIntent.getService(context, 4234,
+                                        new Intent(ACTION_FENCE).setPackage(context.getPackageName()), PendingIntent.FLAG_UPDATE_CURRENT);
     }
 }
